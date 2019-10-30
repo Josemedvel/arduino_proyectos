@@ -1,0 +1,4 @@
+**Possible Improvements for future versions**
+Adding of a RTC module, whether DS3231 or DS1307 for the displaying of the date and hour.
+Adding of a Gas sensor, to know the level of CO2, CO, or even ammonium (NH3).
+Adding of a IOT module to connect to a website where we could see the temperature, air pressure, and humidity online.
