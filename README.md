@@ -1,1 +1,1 @@
-# arduino_proyectos
+Hello all, this repository is about my arduino projects and how have I done them, I will provide code, images, schematics and some explanations when needed. You can learn arduino following this repository, the only thing you need is an Arduino and some sensors.
