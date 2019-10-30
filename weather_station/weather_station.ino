@@ -15,21 +15,56 @@
 DHT_Unified dht(DHTPIN, DHTTYPE);
 Adafruit_BMP280 bmp;
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
+int currLine = 0;
+float temperature;
+float pressure;
+float altitude;
 
-float Temperatura;
-float Presion;
+void lineJump() {
+  currLine ++;
+  lcd.setCursor(0, currLine);
+}
+void cleanDisplay() {
+  lcd.clear();
+}
+void readPrintTemp() {
+  lcd.print("Temp = ");
+  temperature = bmp.readTemperature();
+  lcd.print(temperature);
+  lcd.print(" *C");
+}
+void readPrintHumidity() {//this sensor is also able to measure temperature but is less precise than the BMP280, that is why I only use the humidity sensor
+  sensors_event_t event;
+  dht.humidity().getEvent(&event);
+  lcd.print("Humedad = ");
+  lcd.print(event.relative_humidity);
+  lcd.print(" %");
+}
+void readPrintPressure() {
+  lcd.print("Presion = ");
+  pressure = bmp.readPressure() / 100; // I divide by 100 because Pascal is very small and less used than hPa or mbar
+  lcd.print(pressure);
+  lcd.print(" hPa");
+}
+void readPrintAltitude() {
+  lcd.print("Altura = ");
+  altitude = bmp.readAltitude(1020); //the argument is this function should be the current air pressure in your zone and moment
+  lcd.print(altitude);
+  lcd.print(" m");
+}
 
 void setup() {
   Serial.begin(9600);
   dht.begin();
   sensor_t sensor;
   dht.humidity().getSensor(&sensor);
-  lcd.begin(20,4);
+  lcd.begin(20, 4);
   lcd.backlight();
-  Serial.println("iniciando");
+  Serial.println("Starting");
+  delay(500);
 
   if (!bmp.begin()) {
-    Serial.println("no encontrado");
+    Serial.println("Try to reboot");
     //while (1);
   }
 
@@ -42,24 +77,15 @@ void setup() {
 }
 
 void loop() {
-    lcd.clear();
-    sensors_event_t event;
-    dht.humidity().getEvent(&event);
-    lcd.setCursor(0,0);
-    lcd.print("Temp = ");
-    lcd.print(bmp.readTemperature());
-    lcd.print(" *C");
-    lcd.setCursor(0,1);
-    lcd.print("Presion = ");
-    lcd.print(bmp.readPressure()/100);
-    lcd.print(" hPa");
-    lcd.setCursor(0,2);
-    lcd.print("Altura = ");
-    lcd.print(bmp.readAltitude(1020)); /* Adjusted to local forecast! */
-    lcd.print(" m");
-    lcd.setCursor(0,3);
-    lcd.print("Humedad = ");
-    lcd.print(event.relative_humidity);
-    lcd.print(" %");
-    delay(2000);
+  cleanDisplay();
+  lcd.setCursor(0, 0);
+  readPrintTemp();
+  lineJump();
+  readPrintPressure();
+  lineJump();
+  readPrintAltitude();
+  lineJump();
+  readPrintHumidity();
+  currLine = 0;
+  delay(2000);
 }
