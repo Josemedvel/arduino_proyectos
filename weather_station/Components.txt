@@ -1,0 +1,7 @@
+To carry out this proyect you will need the following:
+	1x Humidity and temperature sensor DHT11 (in this case I will be only using it's humidity sensor)
+	1x Temperature and pressure sensor BMP280
+	1x Arduino board (it does not matter, but the pinout might change if not an UNO as mine)
+Optional equipment:
+	1x LCD display with I2C module to only use 2 pins
+	1x Level shifter (to use serial data and serial clock for the display and the BMP280, that have different operating voltages)
